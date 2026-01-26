@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminDashboard\AdminNotificationController;
 use App\Http\Controllers\WorkerAuthController;
 use App\Http\Controllers\ClientAuthController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -10,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | ADMIN AUTH
 |--------------------------------------------------------------------------
 */
+
 Route::middleware('DbBackup')
     ->prefix('auth/admin')
     ->controller(AdminController::class)
@@ -66,8 +69,21 @@ Route::middleware('DbBackup')
         });
     });
 
-    Route::get('/unauthorize',function(){
-        return response()->json([
-            "message"=>"unauthorize"
-        ],401);
-    })->name('login');
+Route::get('/unauthorize', function () {
+    return response()->json([
+        "message" => "unauthorize"
+    ], 401);
+})->name('login');
+
+Route::controller(PostController::class)->prefix('worker/post')->group(function () {
+    Route::post('/add', 'store')->middleware('auth:worker');
+});
+
+
+Route::controller(AdminNotificationController::class)->middleware('auth:admin')->prefix('admin/notifications')->group(function () {
+    Route::get('/all', 'index');
+    Route::get('/unread', 'unread');
+    Route::post('/markReadAll', 'markreadall');
+    Route::delete('/deleteall', 'deletedAll');
+    Route::delete('/delete/{id}',  'delete');
+});

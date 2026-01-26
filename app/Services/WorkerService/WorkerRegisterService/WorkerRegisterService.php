@@ -58,7 +58,7 @@ class WorkerRegisterService
             $data = $this->validation($request);
             $email = $this->store($data, $request);
             $worker = $this->generateToken($email);
-            $this->sendEmail($worker);
+            // $this->sendEmail($worker); // we nedd to activate account 
             DB::commit();
             return response()->json([
                 "message" => "Account Has Been Created Check Your Email"
