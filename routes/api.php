@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDashboard\AdminNotificationController;
+use App\Http\Controllers\AdminDashboard\PostStatusController;
 use App\Http\Controllers\WorkerAuthController;
 use App\Http\Controllers\ClientAuthController;
 use App\Http\Controllers\PostController;
@@ -77,8 +78,11 @@ Route::get('/unauthorize', function () {
 
 Route::controller(PostController::class)->prefix('worker/post')->group(function () {
     Route::post('/add', 'store')->middleware('auth:worker');
+    Route::get('/show', 'index')->middleware('auth:admin');
+    Route::get('/approved', 'approved')->middleware('auth:admin');
+    Route::get('/rejected', 'rejected')->middleware('auth:admin');
+    Route::get('/pending', 'pending')->middleware('auth:admin');
 });
-
 
 Route::controller(AdminNotificationController::class)->middleware('auth:admin')->prefix('admin/notifications')->group(function () {
     Route::get('/all', 'index');
@@ -86,4 +90,8 @@ Route::controller(AdminNotificationController::class)->middleware('auth:admin')-
     Route::post('/markReadAll', 'markreadall');
     Route::delete('/deleteall', 'deletedAll');
     Route::delete('/delete/{id}',  'delete');
+});
+
+Route::middleware('auth:admin')->controller(PostStatusController::class)->prefix('admin/post')->group(function () {
+    Route::post('/changestatus', 'changeStatus');
 });
