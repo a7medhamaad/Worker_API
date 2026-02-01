@@ -3,17 +3,15 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Pluralizer;
 
-class CreateServiceClass extends FileFactoryCommand
+class CreateInterfaceCommand extends FileFactoryCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:service {classname}';
+    protected $signature = 'make:interface {classname}';
 
     /**
      * The console command description.
@@ -29,14 +27,14 @@ class CreateServiceClass extends FileFactoryCommand
 
     function setFilePath(): string
     {
-        return "App\\Services\\";
+        return "App\\Interfaces\\";
     }
     function setStubName(): string
     {
-        return "servicepattern";
+        return "interface";
     }
     function setSuffix(): string
     {
-        return "Service";
+        return "Interface";
     }
 }

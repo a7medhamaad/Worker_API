@@ -17,9 +17,18 @@ class StoringPostService
     {
         $this->model = new Post();
     }
+
+    public function adminPercent($price)
+    {
+        $discount = $price * 0.05;
+        $priceAfterdiscount = $price - $discount;
+
+        return $priceAfterdiscount;
+    }
     public function storePost($data)
     {
         $data = $data->except('photos');
+        $data['price'] = $this->adminPercent($data['price']);
         $data['worker_id'] = auth()->guard('worker')->id();
         $post = Post::create($data);
         return $post;
@@ -38,8 +47,8 @@ class StoringPostService
 
     function sendAdminNotification($post)
     {
-        $admins=Admin::get();
-        Notification::send($admins, new AdminPost(auth()->guard('worker')->user(),$post));
+        $admins = Admin::get();
+        Notification::send($admins, new AdminPost(auth()->guard('worker')->user(), $post));
     }
 
 
@@ -56,7 +65,8 @@ class StoringPostService
             DB::commit();
 
             return response()->json([
-                "message" => "photo has been Created Successfully"
+                "message" => "Post has been Created Successfully,
+                Your Price After Discount id {$post->price}"
             ]);
         } catch (Exception $e) {
             DB::rollBack();

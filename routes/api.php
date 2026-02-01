@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDashboard\AdminNotificationController;
 use App\Http\Controllers\AdminDashboard\PostStatusController;
+use App\Http\Controllers\Client\ClientOrderController;
+use App\Http\Controllers\Worker\WorkerReviewController;
 use App\Http\Controllers\WorkerAuthController;
 use App\Http\Controllers\ClientAuthController;
 use App\Http\Controllers\PostController;
@@ -50,6 +52,16 @@ Route::middleware('DbBackup')
         });
     });
 
+Route::prefix('worker')
+    ->group(function () {
+        Route::get('pending/orders', [ClientOrderController::class, 'workerPendingOrder'])->middleware('auth:worker');
+        Route::get('rejected/orders', [ClientOrderController::class, 'workerRejectOrder'])->middleware('auth:worker');
+        Route::get('approved/orders', [ClientOrderController::class, 'workerApproveOrder'])->middleware('auth:worker');
+        Route::put('update/order/{id}', [ClientOrderController::class, 'update'])->middleware('auth:worker');
+        Route::post('review', [WorkerReviewController::class, 'reviewStore'])->middleware('auth:client');
+        Route::get('review/post/{postId}', [WorkerReviewController::class, 'postRate'])->middleware('auth:worker');
+    });
+
 /*
 |--------------------------------------------------------------------------
 | CLIENT AUTH
@@ -94,4 +106,12 @@ Route::controller(AdminNotificationController::class)->middleware('auth:admin')-
 
 Route::middleware('auth:admin')->controller(PostStatusController::class)->prefix('admin/post')->group(function () {
     Route::post('/changestatus', 'changeStatus');
+});
+
+
+
+Route::prefix('client')->group(function () {
+    Route::controller(ClientOrderController::class)->prefix('/order')->group(function () {
+        Route::post('/request', 'addOrder')->middleware('auth:client');
+    });
 });

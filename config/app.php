@@ -168,6 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\CrudRepoProvider::class,
         Yousefpackage\LaraBackup\Providers\LaraBackupServiceProvider::class,
         Yousefpackage\LaraBackup\Providers\BackupServiceProvider::class,
         Yousefpackage\LaraBackup\Providers\RouteServiceProvider::class,
@@ -187,8 +188,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'JWTAuth'=>Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactoy'=>Tymon\JWTAuth\Facades\JWTFactory::class,
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactoy' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ])->toArray(),
 
 ];
