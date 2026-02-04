@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDashboard\AdminNotificationController;
 use App\Http\Controllers\AdminDashboard\PostStatusController;
 use App\Http\Controllers\Client\ClientOrderController;
+use App\Http\Controllers\Worker\WorkerProfileController;
 use App\Http\Controllers\Worker\WorkerReviewController;
 use App\Http\Controllers\WorkerAuthController;
 use App\Http\Controllers\ClientAuthController;
@@ -27,7 +28,6 @@ Route::middleware('DbBackup')
         Route::middleware('auth:admin')->group(function () {
             Route::post('logout', 'logout');
             Route::post('refresh', 'refresh');
-            Route::post('user-profile', 'userProfile');
         });
     });
 
@@ -60,6 +60,10 @@ Route::prefix('worker')
         Route::put('update/order/{id}', [ClientOrderController::class, 'update'])->middleware('auth:worker');
         Route::post('review', [WorkerReviewController::class, 'reviewStore'])->middleware('auth:client');
         Route::get('review/post/{postId}', [WorkerReviewController::class, 'postRate'])->middleware('auth:worker');
+        Route::get('profile', [WorkerProfileController::class, 'userProfile'])->middleware('auth:worker');
+        Route::get('profile/edit', [WorkerProfileController::class, 'edit'])->middleware('auth:worker');
+        Route::post('profile/update', [WorkerProfileController::class, 'update'])->middleware('auth:worker');
+        Route::post('profile/posts/delete', [WorkerProfileController::class, 'delete'])->middleware('auth:worker');
     });
 
 /*
@@ -91,9 +95,10 @@ Route::get('/unauthorize', function () {
 Route::controller(PostController::class)->prefix('worker/post')->group(function () {
     Route::post('/add', 'store')->middleware('auth:worker');
     Route::get('/show', 'index')->middleware('auth:admin');
-    Route::get('/approved', 'approved')->middleware('auth:admin');
-    Route::get('/rejected', 'rejected')->middleware('auth:admin');
-    Route::get('/pending', 'pending')->middleware('auth:admin');
+    // Route::get('/approved', 'approved')->middleware('auth:admin');
+    // Route::get('/rejected', 'rejected')->middleware('auth:admin');
+    // Route::get('/pending', 'pending')->middleware('auth:admin');
+    Route::get('/{status}', [PostController::class, 'byStatus'])->middleware('auth:admin');
 });
 
 Route::controller(AdminNotificationController::class)->middleware('auth:admin')->prefix('admin/notifications')->group(function () {

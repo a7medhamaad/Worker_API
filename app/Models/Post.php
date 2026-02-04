@@ -17,21 +17,18 @@ class Post extends Model
         'reject_reason',
     ];
 
-    /**
-     * العلاقة مع Worker
-     * Post belongs to Worker
-     */
     public function worker()
     {
         return $this->belongsTo(Worker::class);
     }
 
-    /**
-     * العلاقة مع الصور
-     * Post has many photos
-     */
     public function photos()
     {
         return $this->hasMany(PostPhoto::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(WorkerReview::class);
     }
 }

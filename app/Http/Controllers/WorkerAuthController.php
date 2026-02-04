@@ -95,12 +95,6 @@ class WorkerAuthController extends Controller
             ]
         ]);
     }
-
-    public function userProfile()
-    {
-        return response()->json(auth()->Guard('worker')->user());
-    }
-
     // public function createNewToken($token)
     // {
     //     return response()->json([
