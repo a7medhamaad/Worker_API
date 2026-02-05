@@ -8,6 +8,7 @@ use App\Http\Controllers\Worker\WorkerProfileController;
 use App\Http\Controllers\Worker\WorkerReviewController;
 use App\Http\Controllers\WorkerAuthController;
 use App\Http\Controllers\ClientAuthController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
